@@ -1,0 +1,52 @@
+processors * * *
+units       real
+dimension   3
+boundary    p p p
+atom_style  full
+
+pair_style  kh/cut/coul/debye 0.1 0.0 35.0
+bond_style  harmonic
+dielectric  80.0
+
+#random seeds
+shell 'rm -f rngs.txt; for s in $(seq 1 100); do echo $RANDOM >> rngs.txt ; done'
+variable seed file rngs.txt
+
+variable t world 350
+
+fix prop all property/atom d_sasa ghost yes
+read_data input.data fix prop NULL SASA
+
+bond_coeff  1 189 3.81
+include KH_D_Coeffs_SASA.txt
+
+special_bonds fene
+group rigid1 id 35:300 949:1225
+group rigid2 id 870:927 1797:1854
+group SH31 id 870:927
+group SH32 id 1797:1854
+group nonrigid subtract all rigid1 rigid2 
+neighbor  3.5 multi
+neigh_modify  every 10 delay 0
+neigh_modify exclude group rigid1 rigid1
+neigh_modify exclude molecule/intra rigid2
+timestep      10.0
+
+velocity all create $t ${seed}
+next seed
+fix fxrigid1 rigid1 rigid/nve single
+fix fxrigid2 rigid2 rigid/nve molecule
+fix fxlange all langevin $t $t 1000.0 ${seed}
+fix fxstandard nonrigid nve
+
+compute egroup1 rigid1 group/group SH31
+compute egroup2 rigid1 group/group SH32
+
+thermo        1000
+thermo_style  custom step pe ke temp c_egroup1 c_egroup2
+thermo_modify flush yes
+dump          VMD1 all xtc 1000 out_$t.xtc
+restart       100000 restart.$t.tmp1 restart.$t.tmp2
+run           250000000 #2.5 us
+
+write_data out_$t.data
