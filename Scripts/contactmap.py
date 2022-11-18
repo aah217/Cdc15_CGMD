@@ -9,6 +9,13 @@ parser.add_argument("-f","--file", help="trajectory file, xtc format",type=str)
 parser.add_argument("-p","--pdbfile", help="pdb file",type=str)
 parser.add_argument("-o","--outfile",help="file to save output (contactmap.p)",default="contactmap.p",type=str)
 args = parser.parse_args()
+
+###
+# Does the following for an xtc trajectory:
+# 1. Calculates contact frequency for entire trajectory
+# 2. Saves contacts in a pickle file for later use
+###
+
 pdb_file = args.pdbfile
 xtc_file = args.file
 traj_name = args.outfile

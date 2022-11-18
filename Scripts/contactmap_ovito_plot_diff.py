@@ -16,6 +16,13 @@ parser.add_argument("-f","--file", help="Ovito file of interest",type=str)
 parser.add_argument("-r","--reffile",help="Ovito file to serve as reference",type=str)
 parser.add_argument("-o","--outfile",help="file to save output (contactmap_ovito.xyz)",default="contactmap_diff_ovito.xyz",type=str)
 args = parser.parse_args()
+
+###
+# Takes two xyz files made with contactmap_ovito_plot.py, assumes they used the same pdb/are the same length
+# and takes the difference of the "velocity columns" which store contact averages and makes a new .xyz for visualization
+###
+
+
 file = args.file
 reffile = args.reffile
 if args.outfile is not None:

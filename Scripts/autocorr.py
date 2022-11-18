@@ -4,13 +4,19 @@ import time
 from scipy import optimize
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("-f","--file", help="file",type=str)
+parser.add_argument("-f","--file", help="file, whitespace separated columns",type=str)
 parser.add_argument("-c","--col", help="column for autocorrelation analysis",type=int)
 parser.add_argument("-o","--outfile", help="output file",type=str)
 args = parser.parse_args()
 
-startTime = time.time()
+###
+# Does the following for a series:
+# 1. Calculates Pearson correlation versus lag time
+# 2. Fits an exponential function to calculate the halflife
+# 3. Outputs a file where data from the original series up to 2 times the halflife is dropped
+###
 
+startTime = time.time()
 file = args.file
 outfile = args.outfile
 col = args.col - 1

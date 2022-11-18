@@ -15,6 +15,10 @@ parser.add_argument("-t","--ticks", help="ticks to draw",type=str)
 parser.add_argument("-p","--pdbfile", help="pdb file (optional)",type=str)
 parser.add_argument("-o","--outfile",help="file to save output, otherwise prints to screen",type=str)
 args = parser.parse_args()
+###
+# This creates a contact map that is the difference of two pickle files made using contactmap.py
+###
+
 startTime = time.time()
 file1 = args.file1
 file2 = args.file2

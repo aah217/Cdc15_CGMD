@@ -14,6 +14,11 @@ parser.add_argument("-t","--ticks", help="ticks to draw",type=str)
 parser.add_argument("-p","--pdbfile", help="pdb file (optional)",type=str)
 parser.add_argument("-o","--outfile",help="file to save output, otherwise prints to screen",type=str)
 args = parser.parse_args()
+
+###
+# This creates a simple contact map using a pickle file made from contactmap.py
+###
+
 startTime = time.time()
 file = args.file
 use_pdb = False
